@@ -14,6 +14,7 @@ import ChatIcon from '@material-ui/icons/Chat'
 import LikeButton from './LikeButton'
 import DeleteScream from './DeleteScream'
 import ScreamDialog from './ScreamDialog'
+import EditScream from './EditScream';
 
 const styles = ({
     card: {
@@ -27,20 +28,22 @@ const styles = ({
       content: {
         padding: 25,
         objectFit: 'cover'
-      }})
+      }
+    })
 
 class Scream extends Component {
    
-    
-  
-   
-
     render() {
-        dayjs.extend(relativeTime)
-        const {classes, scream: {body,likeCount,commentCount,_id,owner,createdAt},user: {authenticated, credentials: {userHandle}}} = this.props
        
-        let deleteButton = authenticated && owner === userHandle ? (
+        dayjs.extend(relativeTime)
+        const {classes, scream: {body,likeCount,commentCount,_id,owner,createdAt, themeName},user: {authenticated, credentials: {userHandle}}, themeData} = this.props
+       
+        let deleteButton = authenticated && (owner === userHandle || userHandle === (themeData && themeData.createdBy)) ? (
+            <React.Fragment>
           <DeleteScream scream={this.props.scream} />
+          {(owner === userHandle) && 
+          <EditScream scream={this.props.scream} />}
+          </React.Fragment>
         ) : null
         return (
             <Card className={classes.card}>
@@ -50,7 +53,8 @@ class Scream extends Component {
                 title="Profile Image"
                 />
                 <CardContent className={classes.content}>
-                    <Typography variant="h5" component={Link} to={`/users/${owner}`} color="primary">{owner}</Typography>
+                {themeName && <Typography variant="h6" component={Link} to={`/themes/${themeName}`} color="secondary">{`#${themeName}`}</Typography>}
+                    <Typography variant="h5" component={Link} to={`/users/${owner}`} color="primary">{`@${owner}`}</Typography>
                     {deleteButton}
 
                     <Typography variant="body2" color="textSecondary">{dayjs(createdAt).fromNow()}</Typography>

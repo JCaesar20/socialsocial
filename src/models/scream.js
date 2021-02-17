@@ -18,6 +18,9 @@ const screamSchema = new mongoose.Schema({
     commentCount:{
         type: Number,
         default:0
+    },
+    themeName: {
+        type: String
     }
 },{
     timestamps: true

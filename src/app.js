@@ -6,6 +6,7 @@ const app = express();
 
 const port = process.env.PORT || 5000
 const userRouter = require('./router/user')
+const themeRouter = require('./router/theme')
 const screamRouter = require('./router/scream')
 const cookieParser = require('cookie-parser')
 
@@ -21,6 +22,7 @@ app.use(cookieParser())
 app.use(express.json())
 app.use(userRouter)
 app.use(screamRouter)
+app.use(themeRouter)
 
 app.use(express.static(path.join(__dirname, '../public/social-client/build')))
 

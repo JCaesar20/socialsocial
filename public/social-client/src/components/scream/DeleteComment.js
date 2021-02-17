@@ -11,7 +11,7 @@ import MyButton from '../../util/myButton'
 import DeleteIcon from '@material-ui/icons/DeleteOutline';
 
 import { connect } from 'react-redux'
-import {deleteScream} from '../../redux/actions/dataActions';
+import {deleteComment} from '../../redux/actions/dataActions';
 
 const styles = (theme) => ({
     ...theme,
@@ -24,7 +24,9 @@ const styles = (theme) => ({
 
 class DeleteScream extends Component {
     state= {
-        open: false
+        open: false,
+        id: this.props.id,
+        screamId: this.props.screamId
     };
     handleOpen = () => {
         this.setState({open: true})
@@ -35,8 +37,8 @@ class DeleteScream extends Component {
         this.setState({open:false})
     }
 
-    deleteScream = () => {
-        this.props.deleteScream(this.props.scream._id)
+    deleteComment = () => {
+        this.props.deleteComment(this.state.id, this.state.screamId)
         this.setState({open:false})
 
     }
@@ -63,7 +65,7 @@ render() {
                     <Button onClick={this.handleClose} color="primary">
                         Cancel
                     </Button>
-                    <Button onClick={this.deleteScream} color="secondary">
+                    <Button onClick={this.deleteComment} color="secondary">
                         Delete
                     </Button>
                 </DialogActions>
@@ -74,11 +76,11 @@ render() {
 }
 
 DeleteScream.propTypes = {
-deleteScream: PropTypes.func.isRequired,
+deleteComment: PropTypes.func.isRequired,
 classes: PropTypes.object.isRequired,
 scream: PropTypes.object.isRequired
 }
 
 
 
-export default connect(null,{deleteScream})(withStyles(styles)(DeleteScream))
+export default connect(null,{deleteComment})(withStyles(styles)(DeleteScream))

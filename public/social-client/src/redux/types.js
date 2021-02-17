@@ -14,6 +14,19 @@ export const SET_SCREAMS = 'SET_SCREAMS'
 export const SET_SCREAM = 'SET_SCREAM'
 export const LIKE_SCREAM = 'LIKE_SCREAM'
 export const UNLIKE_SCREAM = 'UNLIKE_SCREAM'
+export const EDIT_SCREAM = 'EDIT_SCREAM'
 export const DELETE_SCREAM = 'DELETE_SCREAM'
 export const POST_SCREAM = 'POST_SCREAM'
 export const SUBMIT_COMMENT = 'SUBMIT_COMMENT'
+export const EDIT_COMMENT = 'EDIT_COMMENT'
+export const DELETE_COMMENT = 'DELETE_COMMENT'
+
+export const POST_THEME = 'POST_THEME'
+
+export const FOLLOW_THEME = 'FOLLOW_THEME'
+export const UNFOLLOW_THEME = 'UNFOLLOW_THEME'
+
+export const FOLLOW_USER = 'FOLLOW_USER'
+export const UNFOLLOW_USER = 'UNFOLLOW_USER'
+
+export const DELETE_THEME = 'DELETE_THEME'

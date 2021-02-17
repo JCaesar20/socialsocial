@@ -45,7 +45,20 @@ const userSchema = new mongoose.Schema({
                 throw new Error("Wrong format of website");
             }
         }
-    },tokens: [{
+    },
+    followers: [{
+            userHandle: {
+              type: String,
+              required: true,
+            }
+    }],
+    following: [{
+        userHandle: {
+          type: String,
+          required: true,
+        }
+}],
+    tokens: [{
         token:{
             type:String,
             required: true
@@ -92,7 +105,7 @@ userSchema.virtual('senders',{
 userSchema.methods.generateAuthToken = async function () {
     const user = this;
     
-    const token =jwt.sign({_id: user._id.toString()}, process.env.JWTTOKEN,{expiresIn: '7 days'});
+    const token =jwt.sign({_id: user._id.toString()}, process.env.JWTTOKEN);
     
     user.tokens = user.tokens.concat({token})
     await user.save()

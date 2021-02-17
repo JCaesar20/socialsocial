@@ -28,7 +28,7 @@ class user extends Component {
                     profile: res.data.user
                 })
             })
-            .catch(err => console.log(err))
+            .catch(err => {this.props.history.push('/errorUser')})
     }
     render() {
         const {screams,loading} = this.props.data;

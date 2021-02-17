@@ -6,7 +6,7 @@ import Typography from '@material-ui/core/Typography'
 import {Link} from 'react-router-dom'
 import dayjs from 'dayjs'
 import DeleteComment from './DeleteComment'
-
+import EditComment from './EditComment'
 import {connect} from 'react-redux'
 
 const styles= theme => ({
@@ -24,7 +24,7 @@ const styles= theme => ({
 
 class Comments extends Component {
     render(){
-        const {comments,classes, scream: {owner},user: {authenticated, credentials: {userHandle}}} = this.props;
+        const {comments,classes, scream: {owner, _id},user: {authenticated, credentials: {userHandle}}} = this.props;
         return (
             <Grid container>
                 {comments && comments.map((comment,index) =>  (
@@ -49,7 +49,7 @@ class Comments extends Component {
                                     </Typography>
                                     <hr className={classes.invisibleSeparator} />
                                     <Typography variant="body1">{comment.body}</Typography>
-                                    {(owner == userHandle) || (comment.userHandle == userHandle)&& authenticated ? <DeleteComment/>: null}
+                                    {(owner == userHandle) || (comment.userHandle == userHandle)&& authenticated ? <React.Fragment><EditComment  id = {comment._id} screamId= {_id}  commentBody= {comment.body} /> <DeleteComment id = {comment._id} screamId= {_id}/></React.Fragment>: null}
                                     
                                     </div>
                                 </Grid>

@@ -22,7 +22,8 @@ export default {
     color: '#fff !important'
   },
   image: {
-    margin: '20px auto 20px auto'
+    margin: '20px auto 20px auto',
+    width: '150px'
   },
   pageTitle: {
     margin: '10px auto 10px auto',

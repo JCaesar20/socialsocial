@@ -13,7 +13,7 @@ router.post("/scream", auth, async (req, res) => {
     owner: req.user.userHandle,
   });
   if(scream.body === ''){
-    res.status(400).send({error: "body cannot be empty"});
+    return res.status(400).send({error: "body cannot be empty"});
   }
   try {
     await scream.save();
@@ -72,7 +72,6 @@ router.delete("/scream/:id", auth, async (req, res) => {
   try {
     const scream = await Scream.findOne({
       _id: req.params.id,
-      owner: req.user.userHandle,
     });
 
     if (!scream) {
@@ -92,7 +91,7 @@ router.post("/scream/:screamId/comment", auth, async (req, res) => {
   let scream = await Scream.findById(req.params.screamId);
 
     if (!scream) {
-     return res.status(404).send({error: 'The Scream was deleted'});
+      return res.status(404).send({error: 'The Scream was deleted'});
     }else if(!req.body.body){
       return res.status(404).send({error: 'Comment is Empty'});
     }
@@ -123,6 +122,20 @@ router.post("/scream/:screamId/comment", auth, async (req, res) => {
     res.status(400).send({error: "error"});
   }
 });
+
+router.delete("/comment/:screamId/:commentId", auth, async(req,res) => {
+  try{
+    const comment = await Comment.findOneAndDelete({_id:req.params.commentId});
+    if(!comment)
+      return res.send({error: 'comment is not found'})
+      const scream = await Scream.findById(req.params.screamId)
+      console.log(scream, req.params.screamId)
+    await Scream.findByIdAndUpdate(req.params.screamId, {commentCount: --scream.commentCount})  
+    res.send(comment)
+  }catch(e){
+    res.status(400).send({error: "error"});
+  }
+})
 
 router.get("/scream/:screamId/like", auth, async (req, res) => {
   try {
@@ -182,5 +195,43 @@ router.get("/scream/:screamId/unlike", auth, async (req, res) => {
     res.status(400).send();
   }
 });
+
+router.patch('/scream/:screamId', auth, async (req, res) => {
+  console.log(req.body)
+  try{
+    if(req.body.body === '')
+      return res.status(400).send({error: "body cannot be empty"});
+    const scream = await Scream.findOne({
+      _id: req.params.screamId,
+      owner: req.user.userHandle,
+    });
+    if(!scream)
+      return res.send({error: 'Scream not found'})
+    const editedScream = await Scream.findByIdAndUpdate(req.params.screamId,{body: req.body.body}, {new : true})
+    return res.status(200).send(editedScream);
+  }catch(e) {
+    res.status(400).send({error: "error"});
+  }})
+
+
+
+
+router.patch('/comment/:screamId/:id', auth, async (req, res) => {
+  console.log(req.body)
+try{
+  if(req.body.body === '')
+      return res.status(400).send({error: "Body cann't be empty"})
+  const comment = await Comment.findOne({
+    _id: req.params.id,
+    userHandle: req.user.userHandle,
+  });
+  if(!comment)
+    return res.send({error: 'Comment not found'})
+  await Comment.findByIdAndUpdate(req.params.id,{body: req.body.body})
+  return res.status(200).send({...comment.toObject(), body: req.body.body});
+}catch(e) {
+  res.status(400).send({error: "error"});
+}
+})
 
 module.exports = router;

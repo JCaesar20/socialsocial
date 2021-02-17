@@ -6,7 +6,11 @@ import {
   LIKE_SCREAM,
   UNLIKE_SCREAM,
   DELETE_SCREAM,
-  MARK_NOTIFICATIONS_READ
+  MARK_NOTIFICATIONS_READ,
+  FOLLOW_USER,
+  UNFOLLOW_USER,
+  FOLLOW_THEME,
+  UNFOLLOW_THEME
 } from "../types";
 
 const initialState = {
@@ -70,7 +74,21 @@ export default function (state = initialState, action) {
         return {
           ...state
         }
+        
+      case FOLLOW_USER: 
+        return{
+        ...state,
+        credentials: { ...action.payload },
+      }
+      
+      case UNFOLLOW_USER: 
+        return{
+        ...state,
+        credentials: { ...action.payload },
+      }
+
     default:
       return state;
   }
+  
 }

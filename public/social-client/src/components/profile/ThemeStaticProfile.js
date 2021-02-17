@@ -12,6 +12,7 @@ import { connect } from "react-redux";
 import Button from "@material-ui/core/Button";
 import { followUser, unFollowUser } from "../../redux/actions/userActions";
 import CircularProgress from '@material-ui/core/CircularProgress'
+import EditDetailsTheme from './EditDetailsTheme'
 
 const styles = (theme) => ({
   ...theme,
@@ -20,32 +21,36 @@ const styles = (theme) => ({
 const StaticProfile = (props) => {
 
   const [loading, setload] = useState(props.loading)
-  const [pfollowing, setPfollowing] = useState(props.user.credentials.following)
+  const [pfollowing, setPfollowing] = useState(props.user.following)
   
   useEffect(() => {
+    console.log(props.loading)
   setload(props.loading)
   },[props.loading])
 
   useEffect(() => {
-    console.log(props.user.credentials.following)
-  setPfollowing(props.user.credentials.following)
-  },[props.user.credentials.following])
+    console.log(props.user.following)
+  setPfollowing(props.user.following)
+  },[props.user.following])
 
   const {
     classes,
     user: {
       credentials: { userHandle: userMe , following},
     },
+    theme: {
+      themeName,
+      description
+  },
     profile: { userHandle, createdAt, avatar, bio, website },
   } = props;
   const handle = props.user.credentials.userHandle;
   const authh = props.user.credentials.authenticated;
 
-  const checkFollowed = pfollowing && pfollowing.find((user) => {
-    return user.userHandle === userHandle;
-
+  const checkFollowed = following.find((user) => {
+    return user.userHandle !== userMe;
   });
-  console.log(checkFollowed)
+
   const handleFollow = (userHandle) => {
     props.followUser(userHandle);
   };
@@ -56,36 +61,30 @@ const StaticProfile = (props) => {
   return (
     <Paper className={classes.paper}>
       <div className={classes.profile}>
-        <div className="image-wrapper">
+       {/*  <div className="image-wrapper">
           <img
             src={`data:image/jpeg;base64,` + avatar}
             alt="profile"
             className="profile-image"
           />
         </div>
-        <hr />
+        <hr /> */}
         <div className="profile-details">
           <MuiLink
             component={Link}
-            to={`/users/${userHandle}`}
+            to={`/theme/${themeName}`}
             color="primary"
             variant="h5"
           >
-            @{userHandle}
+            #{themeName}
           </MuiLink>
+
           <hr />
           {bio && <Typography variant="body2">{bio}</Typography>}
           <hr />
-          {website && (
-            <Fragment>
-              <LinkIcon color="primary" />
-              <a href={website} targe="_blank" rel="noopener noreferrer">
-                {" "}
-                {website}
-              </a>
-              <hr />
-            </Fragment>
-          )}
+          {userHandle == handle && <EditDetailsTheme/>}
+          
+
           <CalendarToday color="primary" />{" "}
           <span>Joined {dayjs(createdAt).format("MMM YYYY")}</span>
         </div>
@@ -122,6 +121,7 @@ const StaticProfile = (props) => {
 const mapStateToProps = (state) => ({
   loading: state.UI.loading,
   user: state.user,
+  theme: state.data.theme
 });
 
 StaticProfile.propTypes = {

@@ -21,6 +21,11 @@ import home from "./pages/home";
 import signup from "./pages/signup";
 import login from "./pages/login";
 import user from './pages/user';
+import themePage from './pages/themePage'
+
+import errorPage from './pages/dirtyRoute'
+import errorTheme from './pages/dirtyRouteTheme'
+import errorUser from './pages/dirtyRouteUser'
 
 const theme = createMuiTheme(themeFile);
 
@@ -30,6 +35,7 @@ store.dispatch({type: SET_AUTHENTICATED})
 axios.defaults.headers.common['Authorization'] = token;
 store.dispatch(getUserData())
 }
+
 class App extends Component {
   render() {
     return (
@@ -56,11 +62,20 @@ class App extends Component {
                   path="/users/:handle"
                   component={user} 
                   />
+                   <Route 
+                  exact
+                  path="/themes/:themeName"
+                  component={themePage} 
+                  />
                   <Route
                   exact
                   path="/users/:handle/scream/:screamId"
                   component={user}
                   />
+                  <Route path='/errorUser' component={errorUser}/>
+                  <Route path='/errorTheme' component={errorTheme}/>
+                   <Route component={errorPage}/>
+
                 </Switch>
               </div>
             </Router>
