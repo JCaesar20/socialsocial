@@ -145,13 +145,21 @@ export default function (state = initialState, actions) {
 
 
         case SUBMIT_COMMENT:
-        console.log(state.scream.comments)
-        console.log(actions.payload)
+         let indexxx = state.screams.findIndex(
+            (scream) => scream._id === actions.payload.screamID
+          );
+          let newCommentCount = ++state.screams[indexxx].commentCount;
+  
+          const currentScream = state.screams[indexxx]
+          currentScream.commentCount = newCommentCount;
+          state.screams[indexxx] = {...currentScream};
+  
         return{
           ...state, 
           scream: {
             ...state.scream,
-            comments: [actions.payload,...state.scream.comments]
+            comments: [actions.payload,...state.scream.comments],
+            commentCount: state.scream.commentCount + 1
           }
         }
     default:
