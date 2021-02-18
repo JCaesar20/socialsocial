@@ -7,13 +7,34 @@ import ScreamSkeleton from '../util/ScreamSkeleton'
 
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { getScreams } from '../redux/actions/dataActions'
+import { getScreams, getAuthScreams } from '../redux/actions/dataActions'
 
 class home extends Component {
     
+    state = {
+        authenticated: this.props.user.authenticated
+    }
 
     componentDidMount() {
-        this.props.getScreams()
+        if(this.state.authenticated)
+            this.props.getAuthScreams()
+        else
+            this.props.getScreams()
+    }
+
+    componentWillReceiveProps(nextProps) {
+        console.log(nextProps)
+        if(this.props.user.authenticated !== nextProps.user.authenticated){
+            if(nextProps.user.authenticated === true) {
+                this.setState({authenticated: true})  
+                this.props.getAuthScreams()
+
+            }else {
+                this.setState({authenticated: false})  
+                this.props.getScreams()
+
+            }
+        }
     }
 
     
@@ -41,7 +62,8 @@ home.propTypes = {
 }
 
 const mapStateToProps = state => ({
-    data: state.data
+    data: state.data,
+    user: state.user
 })
 
-export default connect(mapStateToProps, { getScreams })(home)  
+export default connect(mapStateToProps, { getScreams, getAuthScreams })(home)  

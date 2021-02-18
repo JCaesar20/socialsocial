@@ -7,15 +7,19 @@ const router = new express.Router();
 
 router.post("/theme", auth, async (req, res) => {
     try {
-        console.log(req.body)
         if(req.body.themeName === ''){
             return res.status(400).send({error: "themeName cannot be empty"});
         }
-        const theme = new Theme({
+        let theme = await Theme.findOne({themeName: req.body.themeName})
+        if(theme)
+            return res.status(404).send({error: 'The ThemeName is found before'});
+        theme = new Theme({
             createdBy: req.user.userHandle,
             members: [{userHandle: req.user.userHandle}],
             ...req.body
         });
+        let user = await User.findOne({userHandle: req.user.userHandle})
+        await User.findOneAndUpdate({userHandle: req.user.userHandle},{following: [...user.following, {userHandle: req.body.themeName}]})
         await theme.save();
         res.status(201).send(theme);
     }catch(e){
@@ -41,7 +45,15 @@ router.get("/theme/:themeName", async (req,res) => {
 router.get("/themes", async (req,res) => {
     try{
        const themes = await Theme.find({});
-        return res.send({themes});
+       const users= await User.find({})
+       let arr = [];
+       for(const theme of themes){
+           arr.push({...theme.toObject(), newHandle: `#${theme.themeName}`});
+        }
+       for(const user of users){
+           arr.push({...user.toObject(), newHandle: `@${user.userHandle}`});
+        }
+        return res.send({arr});
     }catch(e){
         res.status(400).send({error: 'Something went wrong'})
     }

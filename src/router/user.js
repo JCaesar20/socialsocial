@@ -170,14 +170,15 @@ router.post("/user", auth, async (req, res) => {
     }
     const user = await User.findByIdAndUpdate(req.user._id, req.body, {
       new: true,
-      runValidators: true,
     });
 
     res.status(201).send(user);
   } catch (e) {
-    res.status(400).send(e);
+    res.status(400).send({error: 'Wrong Entry'});
   }
 });
+
+
 
 router.post("/notifications", auth, async (req, res) => {
   try {

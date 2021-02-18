@@ -23,6 +23,22 @@ class user extends Component {
         this.props.getUserData(handle);
         axios.get(`/user/${handle}`)
             .then(res => {
+                this.setState({
+                    profile: res.data.user
+                })
+            })
+            .catch(err => {this.props.history.push('/errorUser')})
+    }
+
+
+    componentWillReceiveProps(nextProps) {
+        console.log('here')
+        console.log(nextProps.match.params.handle, this.props.match.params.handle)
+        if(nextProps.match.params.handle !== this.props.match.params.handle) {
+        const handle = nextProps.match.params.handle;
+        this.props.getUserData(handle);
+        axios.get(`/user/${handle}`)
+            .then(res => {
                 console.log(res.data.user)
                 this.setState({
                     profile: res.data.user
@@ -30,6 +46,8 @@ class user extends Component {
             })
             .catch(err => {this.props.history.push('/errorUser')})
     }
+}
+
     render() {
         const {screams,loading} = this.props.data;
         const {screamIdParam} =this.state;

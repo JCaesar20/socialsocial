@@ -49,7 +49,7 @@ class Comments extends Component {
                                     </Typography>
                                     <hr className={classes.invisibleSeparator} />
                                     <Typography variant="body1">{comment.body}</Typography>
-                                    {(owner == userHandle) || (comment.userHandle == userHandle)&& authenticated ? <React.Fragment><EditComment  id = {comment._id} screamId= {_id}  commentBody= {comment.body} /> <DeleteComment id = {comment._id} screamId= {_id}/></React.Fragment>: null}
+                                    {(owner == userHandle) || (comment.userHandle == userHandle)&& authenticated ? <React.Fragment>{(comment.userHandle == userHandle)&& authenticated && <EditComment  id = {comment._id} screamId= {_id}  commentBody= {comment.body} /> }<DeleteComment id = {comment._id} screamId= {_id}/></React.Fragment>: null}
                                     
                                     </div>
                                 </Grid>

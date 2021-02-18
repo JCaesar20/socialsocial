@@ -22,28 +22,21 @@ state = {
 
     axios.get(`/themes`)
     .then(res => {
-        console.log(res.data.themes)
         this.setState({
-            items: res.data.themes
+            items: res.data.arr
         })
     })
     .catch(err => console.log(err))
  
     }
     handleOnSelect = (item) => {
+      console.log(item)
         const { history } = this.props;
-        if(history) history.push(`/themes/${item.themeName}`);
+        if(history&& item.themeName) history.push(`/themes/${item.themeName}`);
+        else if(history&& item.userHandle) history.push(`/users/${item.userHandle}`);
       }
     
   render() {
-    console.log(this.props.location);
-    const top100Films = [
-        { name: 'The Shawshank Redemption', year: 1994 },
-        { name: 'The Godfather', year: 1972 },
-        { name: 'The Godfather: Part II', year: 1974 },
-        { name: 'The Dark Knight', year: 2008 },
-        { name: '12 Angry Men', year: 1957 },
-        { name: "Schindler's List", year: 1993 }]
     const { authenticated } = this.props;
     console.log(this.props.history)
     return (
@@ -63,9 +56,9 @@ state = {
               <ReactSearchAutocomplete
             items={this.state.items}
             onSelect={this.handleOnSelect}
-            fuseOptions={{ keys: ["themeName"] }}
-            resultStringKeyName='themeName'
-            placeholder={'Themes'}
+            fuseOptions={{ keys: ["newHandle"] }}
+            resultStringKeyName='newHandle'
+            placeholder={'Search'}
           />
           </div>
             </Fragment>

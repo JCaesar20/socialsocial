@@ -29,9 +29,13 @@ class EditDetails extends Component {
     state= {
         bio: '',
         website: '',
-        open: false
+        open: false,
+        error: {
+            website: ''
+        }
     };
 
+    
     
    mapUserDetailsToState = (credentials) => {
     this.setState({
@@ -66,9 +70,21 @@ class EditDetails extends Component {
             bio: this.state.bio,
             website: this.state.website
         }
+        if(this.state.website !== '' && !this.validURL(this.state.website))
+            return this.setState({error: {website: 'Wrong Format'}})
         this.props.editUserDetails(userDetails)
         this.handleClose();
     }
+    
+     validURL = (str) => {
+        var pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
+          '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // domain name
+          '((\\d{1,3}\\.){3}\\d{1,3}))'+ // OR ip (v4) address
+          '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // port and path
+          '(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
+          '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
+        return !!pattern.test(str);
+      }
 
     render() {
         const {classes} = this.props
@@ -104,6 +120,8 @@ class EditDetails extends Component {
                             multiline
                             rows="3"
                             placeholder="your personal/professional website"
+                            helperText={this.state.error.website}
+                            error={this.state.error.website?true:false}
                             className={classes.textField}
                             value={this.state.website}
                             onChange={this.handleChange}

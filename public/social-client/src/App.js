@@ -7,8 +7,6 @@ import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
 import themeFile from "./util/theme";
 import AuthRoute from "./util/AuthRoute";
 
-import Cookies from "js-cookie";
-
 import { Provider } from "react-redux";
 import store from "./redux/store";
 import { SET_AUTHENTICATED } from "./redux/types";

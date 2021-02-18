@@ -8,8 +8,26 @@ export const getScreams = () => dispatch => {
             dispatch({
                 type: SET_SCREAMS,
                 payload: res.data
+            })  
+        })
+        .catch(err => {
+            dispatch({
+                type: SET_SCREAMS,
+                payload: [] 
             })
-            
+        })
+}
+
+
+export const getAuthScreams = () => dispatch => {
+    dispatch({type: LOADING_DATA});
+    console.log('hererere')
+    axios.get('/screamsAuth')
+        .then(res => {
+            dispatch({
+                type: SET_SCREAMS,
+                payload: res.data
+            })  
         })
         .catch(err => {
             dispatch({
