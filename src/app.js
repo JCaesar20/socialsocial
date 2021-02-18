@@ -26,7 +26,9 @@ app.use(themeRouter)
 
 
 app.use(express.static(path.join(__dirname, '../public/social-client/build')))
-
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../public/social-client/build/index.html'));
+  });
 
 app.listen(port, ()=>{
     console.log('Server Started')
