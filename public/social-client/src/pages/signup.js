@@ -50,6 +50,13 @@ class signup extends Component {
       userHandle: this.state.userHandle,
     };
 
+    if(userData.Email === '' || userData.password === '' || userData.userHandle === '')
+      return this.setState({errors: {error: 'Please fill all the fields'}})
+
+    if(!this.validateEmail(userData.Email)) {
+      return this.setState({errors: {email: 'Wrong Format of Email'}})
+    }
+
     this.props.signupUser(userData, this.props.history);
   };
 
@@ -58,6 +65,11 @@ class signup extends Component {
       [event.target.name]: event.target.value,
     });
   };
+
+  validateEmail = (email) => {
+    const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
+}
 
   render() {
     const {

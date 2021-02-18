@@ -1,8 +1,10 @@
 import React, { Component } from "react";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-dom";
 import "./App.css";
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
 import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
+
+import Cookies from "js-cookie";
 
 import themeFile from "./util/theme";
 import AuthRoute from "./util/AuthRoute";
@@ -28,7 +30,7 @@ import errorUser from './pages/dirtyRouteUser'
 const theme = createMuiTheme(themeFile);
 
 const token = localStorage.getItem("auth_token");
-if (token) {
+if (token && Cookies.get('auth_token')) {
 store.dispatch({type: SET_AUTHENTICATED})
 axios.defaults.headers.common['Authorization'] = token;
 store.dispatch(getUserData())
@@ -72,8 +74,8 @@ class App extends Component {
                   />
                   <Route path='/errorUser' component={errorUser}/>
                   <Route path='/errorTheme' component={errorTheme}/>
-                   <Route component={errorPage}/>
-
+                  <Route path="/404" component={errorPage}/>
+                  <Redirect from="*" to="/404" />
                 </Switch>
               </div>
             </Router>

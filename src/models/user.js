@@ -124,13 +124,13 @@ userSchema.methods.toJSON = function () {
 
 userSchema.statics.findbyCredintials = async (Email,password) =>{
     const user = await User.findOne({Email})
-
+    console.log(user)
     if(!user){
         throw new Error('unable to login')
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
-
+    console.log(isMatch)
     if(!isMatch){
         throw new Error('unable to login')
     }

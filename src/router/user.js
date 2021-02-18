@@ -103,6 +103,7 @@ router.post("/login", async (req, res) => {
     res.cookie("auth_token", token);
     res.send({ user, token });
   } catch (e) {
+    console.log(e)
     res.status(400).send({
       error: "Wrong data Entry",
     });
