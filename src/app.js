@@ -24,8 +24,13 @@ app.use(userRouter)
 app.use(screamRouter)
 app.use(themeRouter)
 
-app.use(express.static(path.join(__dirname, '../public/social-client/build')))
-
+if (process.env.NODE_ENV === 'production') {
+    app.use(express.static(path.join(__dirname, '../public/social-client/build')))
+    const path = require('path');
+    app.get('*', (req, res) => {
+      res.sendFile(path.resolve(__dirname, 'public/social-client', 'build', 'index.html'));
+    });
+  }
 
 app.listen(port, ()=>{
     console.log('Server Started')
